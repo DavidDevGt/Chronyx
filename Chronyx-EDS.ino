@@ -7,21 +7,16 @@
 #include <WiFiManager.h>
 
 #define CPU_FREQ_MHZ      160
-
-// Puertos neutrales, no “firma” ni conflicto
 #define LISTEN_PORT       54123
 #define LOCAL_PORT        54124
-
 #define ENTROPY_POOL_SIZE 512
 #define MIN_ENTROPY_BYTES 128
 #define HASH_SIZE         32
 #define SIG_SIZE          64
 
-// IP neutra (se sobrescribe por WiFiManager igual)
 char taas_ip_str[16] = "0.0.0.0";
 bool should_save_config = false;
 
-// Puerto backend neutro
 uint16_t taas_port = 54125;
 
 struct __attribute__((packed, aligned(4))) chaos_packet_t {
