@@ -27,20 +27,16 @@ The entropy source is based on the mathematical principle that physical noise an
 
 Each entropy sample is computed as:
 
-[
-E_i = ADC_i \oplus J_i
-]
+$$E_i = ADC_i \oplus J_i$$
 
 Where:
 
-* (ADC_i) is the raw analog noise read from the ESP8266 ADC
-* (J_i) is the instantaneous CPU cycle counter
+* $ADC_i$ is the raw analog noise read from the ESP8266 ADC.
+* $J_i$ is the instantaneous CPU cycle counter.
 
 These values are accumulated into a memory pool and condensed into a fixed-size entropy product:
 
-[
-Seed = SHA256(E_1 \parallel E_2 \parallel \dots \parallel E_n)
-]
+$$\text{Seed} = \text{SHA256}(E_1 \parallel E_2 \parallel \dots \parallel E_n)$$
 
 This transforms chaotic physical signals into uniform, cryptographically usable output.
 
@@ -57,6 +53,7 @@ ANALOG NOISE        DIGITAL JITTER           ENTROPY CORE             NETWORK
 │ Noise       │   │ Instruction   │──┼──►│ Pool + SHA256  │    │ Interface   │
 └─────────────┘   │ Timing        │──┘   │ Condenser      │    │             │
                   └───────────────┘      └────────────────┘    └─────────────┘
+
 ```
 
 The device never exposes raw noise.
@@ -68,17 +65,11 @@ Only hashed, condensed entropy leaves the system.
 
 Chronyx enforces:
 
-* Fixed 160 MHz CPU frequency
-* Disabled WiFi sleep modes
-* Continuous entropy harvesting
+* **Fixed 160 MHz CPU frequency** to maximize sample resolution.
+* **Disabled WiFi sleep modes** to prevent clock gating and power management interference.
+* **Continuous entropy harvesting** to maintain pool freshness.
 
-This ensures:
-
-* Maximum timing jitter
-* No power-management smoothing
-* Stable entropy flow
-
-All unpredictability comes from physics, not software.
+This ensures maximum timing jitter and no power-management smoothing. All unpredictability comes from physics, not software.
 
 ---
 
@@ -86,26 +77,23 @@ All unpredictability comes from physics, not software.
 
 Chronyx exposes a **raw binary UDP interface**.
 
-When queried:
+* **Query Port:** `42069` (Listen)
+* **Response Port:** `42070` (Local/Response)
 
-* If entropy is ready, the device returns a fixed-size entropy product
-* If not, it continues mining until ready
+**Behavior:**
 
-This design guarantees:
+* If entropy is ready, the device returns a fixed-size entropy product.
+* If not, it continues mining until ready.
 
-* Zero framing overhead
-* Minimal latency
-* Deterministic response size
+This design guarantees zero framing overhead, minimal latency, and a deterministic response size.
 
 ---
 
 ## Why Chronyx Exists
 
-Cryptography, distributed systems, secure protocols and time-based systems all depend on **unpredictability**.
+Cryptography, distributed systems, secure protocols, and time-based systems all depend on **unpredictability**.
 
-Most systems simulate randomness.
-
-Chronyx measures it.
+Most systems simulate randomness. **Chronyx measures it.**
 
 By extracting entropy directly from the microcontroller’s physical behavior, Chronyx provides a **hardware-rooted source of cryptographic material**.
 
@@ -119,8 +107,7 @@ By extracting entropy directly from the microcontroller’s physical behavior, C
 
 ## Philosophy
 
-> “Randomness is not computed.
-> It is observed.”
+> “Randomness is not computed. It is observed.”
 
 Chronyx is built on the idea that **silicon is never perfectly predictable** — and that unpredictability is a resource.
 
